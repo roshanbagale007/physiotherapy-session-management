@@ -72,7 +72,33 @@ public class DatabaseConnectionPool {
         config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
 
         dataSource = new HikariDataSource(config);
+        syncPostgresSequences();
         System.out.println("HikariCP Connection Pool [" + poolName + "] successfully initialized.");
+    }
+
+    /**
+     * Synchronizes PostgreSQL sequences with maximum existing IDs.
+     * Prevents duplicate key violations when seed data was loaded with explicit IDs.
+     */
+    private static void syncPostgresSequences() {
+        try (Connection conn = dataSource.getConnection();
+             java.sql.Statement stmt = conn.createStatement()) {
+            if ("PostgreSQL".equalsIgnoreCase(conn.getMetaData().getDatabaseProductName())) {
+                String[] tables = {
+                    "users", "therapists", "patients", "treatment_plans",
+                    "exercises", "plan_exercises", "packages_invoices", "sessions", "soap_notes"
+                };
+                for (String table : tables) {
+                    try {
+                        stmt.execute("SELECT setval('" + table + "_id_seq', COALESCE((SELECT MAX(id) FROM " + table + "), 1))");
+                    } catch (SQLException ignored) {
+                        // Skip if sequence does not exist
+                    }
+                }
+            }
+        } catch (Exception e) {
+            // Non-fatal fallback
+        }
     }
 
     /**

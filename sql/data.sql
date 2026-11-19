@@ -138,3 +138,17 @@ INSERT INTO soap_notes (id, session_id, pain_score_before, pain_score_after, ran
 'Core endurance improving. Patient ready for ergonomic workstation transition.', 
 'Begin functional lifting mechanics and progressive core endurance training.', 
 'IFT 4-pole, Dynamic Core Stabilization Drills');
+
+-- ----------------------------------------------------------------------------
+-- 10. POSTGRESQL SEQUENCE SYNCHRONIZATION
+-- Ensures auto-increment sequences start after seed IDs
+-- ----------------------------------------------------------------------------
+SELECT setval('users_id_seq', COALESCE((SELECT MAX(id) FROM users), 1));
+SELECT setval('therapists_id_seq', COALESCE((SELECT MAX(id) FROM therapists), 1));
+SELECT setval('patients_id_seq', COALESCE((SELECT MAX(id) FROM patients), 1));
+SELECT setval('treatment_plans_id_seq', COALESCE((SELECT MAX(id) FROM treatment_plans), 1));
+SELECT setval('exercises_id_seq', COALESCE((SELECT MAX(id) FROM exercises), 1));
+SELECT setval('plan_exercises_id_seq', COALESCE((SELECT MAX(id) FROM plan_exercises), 1));
+SELECT setval('packages_invoices_id_seq', COALESCE((SELECT MAX(id) FROM packages_invoices), 1));
+SELECT setval('sessions_id_seq', COALESCE((SELECT MAX(id) FROM sessions), 1));
+SELECT setval('soap_notes_id_seq', COALESCE((SELECT MAX(id) FROM soap_notes), 1));
