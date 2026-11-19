@@ -7,6 +7,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Doctor Dashboard | PhysioCare Portal</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+    <style>
+        .btn-soap {
+            background: #0284c7;
+            color: white;
+            padding: 0.35rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: background 0.2s;
+        }
+        .btn-soap:hover {
+            background: #0369a1;
+        }
+    </style>
 </head>
 <body>
     <header class="navbar">
@@ -21,6 +37,14 @@
     </header>
 
     <main class="container">
+        <!-- PRG Alerts -->
+        <c:if test="${not empty param.success}">
+            <div class="alert alert-success">✅ ${param.success}</div>
+        </c:if>
+        <c:if test="${not empty param.error}">
+            <div class="alert alert-danger">⚠️ ${param.error}</div>
+        </c:if>
+
         <div class="card">
             <div class="card-header">
                 <h2 class="card-title">My Patient Appointment Queue</h2>
@@ -34,6 +58,7 @@
                             <th>Patient Name</th>
                             <th>Diagnosis / Condition</th>
                             <th>Session Status</th>
+                            <th>Clinical Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -48,12 +73,25 @@
                                         <td>
                                             <span class="status-tag status-${s.status}">${s.status}</span>
                                         </td>
+                                        <td>
+                                            <c:if test="${s.status eq 'SCHEDULED'}">
+                                                <a href="${pageContext.request.contextPath}/doctor/soap-note?sessionId=${s.id}" class="btn-soap">
+                                                    📝 Record SOAP Note
+                                                </a>
+                                            </c:if>
+                                            <c:if test="${s.status eq 'ATTENDED'}">
+                                                <span style="color:var(--success); font-weight:600; font-size:0.85rem;">✓ Note Recorded</span>
+                                            </c:if>
+                                            <c:if test="${s.status eq 'CANCELLED'}">
+                                                <span style="color:var(--text-muted); font-size:0.85rem;">Cancelled</span>
+                                            </c:if>
+                                        </td>
                                     </tr>
                                 </c:forEach>
                             </c:when>
                             <c:otherwise>
                                 <tr>
-                                    <td colspan="5" style="text-align:center; color:var(--text-muted);">No sessions scheduled currently.</td>
+                                    <td colspan="6" style="text-align:center; color:var(--text-muted);">No sessions scheduled currently.</td>
                                 </tr>
                             </c:otherwise>
                         </c:choose>

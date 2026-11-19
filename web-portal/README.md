@@ -7,18 +7,61 @@
 
 ---
 
-## 1. Syllabus Unit 2 Mapping
+## 1. Syllabus Unit 2 Architecture & Workflows
 
-| Syllabus Unit 2 Topic | Implementation in `web-portal` |
-| :--- | :--- |
-| **2.1 - 2.3: Servlets, Life Cycle & Requests** | `LoginServlet`, `LogoutServlet`, and Dashboard Servlets (`AdminDashboardServlet`, `DoctorDashboardServlet`, etc.) handling HTTP GET and POST requests, headers, and request forwarding. |
-| **2.4: Session Management** | `HttpSession` management with 30-minute inactivity timeout configured in `web.xml`, storing principal credentials and roles, and explicit invalidation via `LogoutServlet`. |
-| **2.5: Servlet Filters (RBAC Barrier)** | `AuthFilter.java` intercepting all incoming HTTP requests to validate sessions and enforce strict Role-Based Access Control (`ADMIN`, `THERAPIST`, `RECEPTIONIST`, `PATIENT`), triggering HTTP 403 Forbidden on violations. |
-| **2.2.1 - 2.2.3: JSP Architecture, EL & JSTL** | Modern JSP views in `WEB-INF/views/` rendered using Jakarta Standard Tag Library (`jakarta.tags.core`) `<c:if>`, `<c:forEach>`, and Expression Language (`${sessionScope.user}`). |
+```
+                           Clinical Web Portal Architecture
+   ┌─────────────────────────────────────────────────────────────────────────────┐
+   │                  Apache Tomcat 10.1 (Port 8025) - Context: /web-portal       │
+   └──────────────────────────────────────┬──────────────────────────────────────┘
+                                          │
+                                 [ AuthFilter (/*) ]
+                                          │
+                   ┌──────────────────────┼──────────────────────┐
+                   ▼                      ▼                      ▼
+         [Front Desk Portal]      [Doctor Hub Portal]    [Patient Portal]
+         /desk/dashboard          /doctor/dashboard      /patient/dashboard
+         /desk/book-session       /doctor/soap-note      /patient/log-exercise
+         /desk/mark-attendance            │                      │
+                   │                      │                      │
+                   └──────────────────────┼──────────────────────┘
+                                          ▼
+                         [ Post-Redirect-Get (PRG) Pattern ]
+                                          │
+                                          ▼
+                      [ PostgreSQL 18+ (physio_db) Via HikariCP ]
+```
 
 ---
 
-## 2. Test User Accounts
+## 2. Interactive Clinical Workflows
+
+### A. Front Desk (Receptionist) Workflows (`/desk/*`)
+* **Live Schedule & Attendance:** Lists upcoming appointments with one-click **"✓ Mark Present"** and **"✕ Cancel"** buttons.
+* **Appointment Booking (`/desk/book-session`):**
+  * Selects Patient, Active Treatment Plan, Specialist, Date, and 45-minute Time Slot.
+  * Links prepaid therapy package (auto-deducts session credit).
+  * **Real-time Conflict Detection:** Prevents double-booking therapist slots.
+  * **PRG Pattern:** Redirects after booking to eliminate duplicate form submissions on browser refresh.
+
+### B. Doctor Clinical Workflows (`/doctor/*`)
+* **Patient Appointment Queue:** Shows scheduled visits.
+* **Digital SOAP Notes Form (`/doctor/soap-note`):**
+  * Patient intake summary (Diagnosis, Rehab Goals, Slot).
+  * **Interactive Pain Sliders (VAS 0–10):** Visual sliders tracking pain before vs after therapy.
+  * **Range of Motion (ROM):** Joint flexibility degrees (e.g. *Shoulder Abduction 145 deg*).
+  * **Manual Muscle Testing (MMT):** Strength grade (1/5 to 5/5).
+  * **Therapy Modalities Checkboxes:** IFT, Ultrasound, Mechanical Traction, Cryotherapy, Manual Mobilization, Dry Needling.
+  * **Stored Procedure Integration:** Invokes `sp_complete_session_and_deduct` via CallableStatement to atomically save SOAP notes, mark attendance, and update plan milestones.
+
+### C. Patient Portal Workflows (`/patient/*`)
+* **Rehabilitation Milestone Tracker:** Progress bar showing completed sessions vs target (e.g. *4 of 10 sessions completed*).
+* **Upcoming Appointments:** Dates, times, and therapist names.
+* **Home Exercise Program (HEP):** Prescribed exercises with sets, reps, clinician notes, and interactive **"✓ Mark Done"** daily adherence logging.
+
+---
+
+## 3. Test User Accounts
 
 | Role | Username | Password | Dedicated Route |
 | :--- | :--- | :--- | :--- |
@@ -26,28 +69,3 @@
 | **THERAPIST (Doctor)** | `dr.sameer` | `Doctor@123` | `http://localhost:8025/web-portal/doctor/dashboard` |
 | **RECEPTIONIST** | `receptionist` | `Staff@123` | `http://localhost:8025/web-portal/desk/dashboard` |
 | **PATIENT** | `rahul.v` | `Patient@123` | `http://localhost:8025/web-portal/patient/dashboard` |
-
----
-
-## 3. How to Deploy & Run on Apache Tomcat 10.1 in Eclipse
-
-1. Open **Eclipse IDE**.
-2. Look at the bottom pane $\rightarrow$ Click on the **Servers** tab.
-   *(You will see **Tomcat v10.1 Server at localhost**)*
-3. Right-click on **Tomcat v10.1 Server at localhost** $\rightarrow$ Click **Add and Remove...**
-4. Select **`web-portal`** from the Available column $\rightarrow$ Click **Add >** $\rightarrow$ Click **Finish**.
-5. Right-click the Tomcat server $\rightarrow$ Click **Start** (or click the green Run icon).
-6. Open your web browser (Chrome / Edge) and navigate to:
-   $$\mathbf{\texttt{http://localhost:8025/web-portal/login}}$$
-7. Test logging in with any of the accounts above!
-
----
-
-## 4. How to Test the Security Filter (AuthFilter)
-
-1. Log in as a Patient using `rahul.v` / `Patient@123`.
-2. Notice you land on the **Patient Portal** showing Rahul's diagnosis, progress bar, and appointments.
-3. Now, in your browser URL address bar, manually try to visit the Administrator URL:
-   `http://localhost:8025/web-portal/admin/dashboard`
-4. **Expected Result:** `AuthFilter` intercepts the request and instantly renders the **403 Access Denied** security page!
-5. Click **Logout** to test `session.invalidate()` and return safely to the login screen.

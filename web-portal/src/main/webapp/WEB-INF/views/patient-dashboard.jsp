@@ -22,6 +22,20 @@
             border-radius: 12px;
             transition: width 0.5s ease;
         }
+        .btn-check-done {
+            background: #dcfce7;
+            color: #15803d;
+            border: 1px solid #86efac;
+            padding: 0.3rem 0.7rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-check-done:hover {
+            background: #bbf7d0;
+        }
     </style>
 </head>
 <body>
@@ -37,6 +51,11 @@
     </header>
 
     <main class="container">
+        <!-- PRG Success Alert -->
+        <c:if test="${not empty param.success}">
+            <div class="alert alert-success">🎉 ${param.success}</div>
+        </c:if>
+
         <!-- Recovery Plan Overview Card -->
         <div class="card">
             <div class="card-header">
@@ -91,7 +110,7 @@
             </div>
         </div>
 
-        <!-- Prescribed Home Exercises Card -->
+        <!-- Prescribed Home Exercises Card with Interactive Adherence -->
         <div class="card">
             <div class="card-header">
                 <h2 class="card-title">Prescribed Home Exercises (HEP)</h2>
@@ -104,6 +123,7 @@
                             <th>Target Muscle</th>
                             <th>Prescription</th>
                             <th>Clinician Instructions</th>
+                            <th>Daily Log</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -115,12 +135,18 @@
                                         <td>${e.muscle}</td>
                                         <td><strong>${e.sets} sets &times; ${e.reps} reps</strong></td>
                                         <td style="color:var(--text-muted); font-size:0.9rem;">${e.notes}</td>
+                                        <td>
+                                            <form action="${pageContext.request.contextPath}/patient/log-exercise" method="post" style="display:inline;">
+                                                <input type="hidden" name="exerciseName" value="${e.name}">
+                                                <button type="submit" class="btn-check-done">✓ Mark Done</button>
+                                            </form>
+                                        </td>
                                     </tr>
                                 </c:forEach>
                             </c:when>
                             <c:otherwise>
                                 <tr>
-                                    <td colspan="4" style="text-align:center; color:var(--text-muted);">No home exercises assigned currently.</td>
+                                    <td colspan="5" style="text-align:center; color:var(--text-muted);">No home exercises assigned currently.</td>
                                 </tr>
                             </c:otherwise>
                         </c:choose>
