@@ -29,6 +29,8 @@ bin/
 **/.settings/
 .recommenders/
 *.launch
+.project
+.classpath
 
 # IntelliJ IDEA
 .idea/
