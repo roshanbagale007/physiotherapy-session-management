@@ -23,7 +23,7 @@ build/
 bin/
 **/bin/
 
-# Eclipse project files that are environment-specific
+# Eclipse project files
 .metadata/
 .settings/
 **/.settings/
@@ -36,7 +36,7 @@ bin/
 *.iws
 out/
 
-# VS Code / Antigravity
+# VS Code
 .vscode/
 
 # OS generated files
@@ -46,7 +46,10 @@ Desktop.ini
 $RECYCLE.BIN/
 .DS_Store
 
-# Application secrets and credentials (if any)
+# Temporary & Environment files
 application-local.properties
 application-local.yml
 *.env
+*.tmp
+temp/
+tmp/

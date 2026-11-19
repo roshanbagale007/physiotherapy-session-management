@@ -8,24 +8,28 @@
 ---
 
 ## 📌 Project Overview
-The **Physiotherapy Session Management System** is a complete enterprise-grade healthcare management application designed to streamline rehabilitation scheduling, session attendance tracking, and individualized patient treatment plans.
+The **Physiotherapy Session Management System** is an enterprise-grade clinical management application designed to streamline rehabilitation scheduling, session attendance tracking, and individualized patient treatment plans.
 
-This project implements the allocated domain across **all five modules** of the Advance Java Programming syllabus, demonstrating progressive software architectures from traditional JDBC to modern Spring Boot microservices:
+This project implements the allocated domain across **all five modules** of the Advance Java Programming syllabus, structured as a modular enterprise architecture:
 
-1. **`sql/`**: Relational database schemas, mock data, and stored procedures.
-2. **`task1-jdbc/`**: Data Access Layer implemented using raw **JDBC** with HikariCP connection pooling, `PreparedStatement`, `CallableStatement`, batch processing, and rollback transactions.
-3. **`task2-web/`**: Web portal built with **Jakarta Servlets 6 & JSP** running on **Apache Tomcat 10.1**, featuring session management and security filters.
-4. **`task3-spring-mvc/`**: Enterprise MVC architecture with **Spring Framework 6**, **JPA/Hibernate**, Inversion of Control (IoC), Dependency Injection (DI), and Bean Validation.
-5. **`task4-boot/`**: RESTful Microservice built with **Spring Boot 3.3**, Spring Data JPA, centralized exception handling, and tested with Postman.
-6. **`task5-hibernate/`**: Advanced persistence using core **Hibernate 6**, SessionFactory, HQL analytics, Criteria API, and second-level caching (Ehcache).
-7. **`report/`**: Comprehensive project documentation following university guidelines.
+| Module Directory | Architecture & Technologies | Academic Unit Mapping |
+| :--- | :--- | :--- |
+| **`sql/`** | Relational schemas, ACID constraints, seed data, stored procedures | Relational Database Engine |
+| **`jdbc-data-access/`** | Thread-safe DAO Layer with HikariCP pooling, transactions & batching | Task 1: JDBC |
+| **`web-portal/`** | Jakarta Servlets 6, JSP, JSTL & RBAC security filters on Tomcat 10.1 | Task 2: Servlets & JSP |
+| **`spring-mvc-service/`** | Spring 6 MVC, JPA 3.1 ORM, IoC/DI container & Bean validation | Task 3: JPA & Spring MVC |
+| **`api-microservice/`** | Cloud-Native Spring Boot 3.3 REST API with Swagger & Postman tests | Task 4: Spring Boot REST |
+| **`hibernate-analytics/`** | Core Hibernate 6, HQL, Criteria API & Ehcache L2 cache benchmarking | Task 5: Hibernate |
+| **`report/`** | Comprehensive academic report (`.docx`) & presentation materials | Course Assessment |
 
 ---
 
-## 🎯 Core Functionalities
+## 🎯 Core Clinical Functionalities
 - **Schedule Sessions:** Allocate appointments between patients and physiotherapists with conflict prevention and slot verification.
 - **Record Attendance:** Track real-time session attendance (Attended, Cancelled, Rescheduled) with therapist notes and pre/post pain scale indices.
 - **Track Treatment Plans:** Prescribe targeted exercises, monitor rehabilitation milestones, and evaluate patient recovery progress over time.
+- **Clinical SOAP Notes:** Standardized physical therapy documentation (Subjective, Objective, Assessment, Plan) with Range of Motion (ROM) metrics.
+- **Package Billing:** Manage multi-session therapy packages with automatic credit deductions and digital receipt generation.
 
 ---
 
@@ -33,23 +37,23 @@ This project implements the allocated domain across **all five modules** of the 
 - **Language:** Java 21 LTS
 - **Build Tool:** Apache Maven
 - **Web Server:** Apache Tomcat 10.1 (Jakarta EE namespace)
-- **Frameworks:** Spring Framework 6, Spring Boot 3.3, Hibernate 6 ORM
+- **Frameworks:** Spring Framework 6, Spring Boot 3.3, Hibernate 6 ORM, HikariCP
 - **Database:** PostgreSQL / MySQL
-- **Testing & Tools:** Postman, JUnit, Git, Eclipse IDE / Antigravity IDE
+- **Testing & Tools:** Postman, Swagger OpenAPI 3.0, JUnit 5, Git, Eclipse IDE / Antigravity IDE
 
 ---
 
 ## 📂 Repository Structure
 ```
 physiotherapy-session-management/
-├── sql/                   # DDL schemas, sample data, and stored procedures
-├── task1-jdbc/            # Task 1: JDBC Data Access Layer
-├── task2-web/             # Task 2: Jakarta Servlets + JSP Web Portal
-├── task3-spring-mvc/      # Task 3: JPA + Spring MVC Application
-├── task4-boot/            # Task 4: Spring Boot RESTful Microservice
-├── task5-hibernate/       # Task 5: Hibernate 6 Core & Caching Module
+├── sql/                   # DDL schemas, sample clinical data, and stored procedures
+├── jdbc-data-access/      # Task 1: High-Performance JDBC Data Access Layer
+├── web-portal/            # Task 2: Jakarta Servlets 6 + JSP Multi-Role Web Portal
+├── spring-mvc-service/    # Task 3: JPA 3.1 + Spring MVC Enterprise Application
+├── api-microservice/      # Task 4: Spring Boot 3.3 RESTful Microservice
+├── hibernate-analytics/   # Task 5: Hibernate 6 Core & Caching Module
 ├── report/                # Mini-Project Report and Presentation
-├── .gitignore             # Git ignore patterns
+├── .gitignore             # Git ignore patterns (protects internal planning & caches)
 └── README.md              # Project documentation
 ```
 
