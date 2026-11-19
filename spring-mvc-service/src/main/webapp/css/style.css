@@ -1,0 +1,345 @@
+/* ==========================================================================
+   Physiotherapy Session Management - Spring MVC Clinical Portal
+   ========================================================================== */
+
+:root {
+    --primary: #0077b6;
+    --primary-dark: #023e8a;
+    --primary-light: #caf0f8;
+    --accent: #0096c7;
+    --success: #2a9d8f;
+    --warning: #f4a261;
+    --danger: #e63946;
+    --bg-light: #f4f7f6;
+    --card-bg: #ffffff;
+    --text-main: #1f2937;
+    --text-muted: #6b7280;
+    --border: #e5e7eb;
+    --radius: 10px;
+    --shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+}
+
+body {
+    background-color: var(--bg-light);
+    color: var(--text-main);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- Top Navigation Bar --- */
+.navbar {
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+    color: white;
+    padding: 0.9rem 2.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+}
+
+.navbar .brand {
+    font-size: 1.25rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    text-decoration: none;
+    color: white;
+}
+
+.navbar .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.navbar .nav-links a {
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    transition: background-color 0.2s;
+}
+
+.navbar .nav-links a:hover, .navbar .nav-links a.active {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+}
+
+/* --- Layout Container --- */
+.container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+    flex: 1;
+    width: 100%;
+}
+
+.header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.8rem;
+}
+
+.page-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--primary-dark);
+}
+
+.page-subtitle {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin-top: 0.2rem;
+}
+
+/* --- Flash Messages --- */
+.alert {
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius);
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.alert-success {
+    background-color: #d1e7dd;
+    color: #0f5132;
+    border: 1px solid #badbcc;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #842029;
+    border: 1px solid #f5c2c7;
+}
+
+/* --- Cards --- */
+.card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 1.8rem;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    margin-bottom: 2rem;
+}
+
+.card-title {
+    font-size: 1.2rem;
+    font-weight: 650;
+    color: var(--primary-dark);
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 2px solid var(--primary-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* --- Stats Grid --- */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.stat-box {
+    background: white;
+    padding: 1.4rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    border-left: 5px solid var(--primary);
+}
+
+.stat-box.success { border-left-color: var(--success); }
+.stat-box.warning { border-left-color: var(--warning); }
+.stat-box.accent { border-left-color: var(--accent); }
+
+.stat-box .stat-label {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.stat-box .stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-top: 0.3rem;
+}
+
+/* --- Tables --- */
+.table-responsive {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+th {
+    background-color: #f8fafc;
+    color: var(--text-muted);
+    font-weight: 600;
+    text-align: left;
+    padding: 0.85rem 1rem;
+    border-bottom: 2px solid var(--border);
+}
+
+td {
+    padding: 0.9rem 1rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+}
+
+tr:hover {
+    background-color: #f8fafd;
+}
+
+/* --- Progress Bar --- */
+.progress-bar-container {
+    width: 100%;
+    background-color: #e2e8f0;
+    border-radius: 12px;
+    height: 10px;
+    overflow: hidden;
+    margin-top: 0.3rem;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--success));
+    border-radius: 12px;
+    transition: width 0.3s ease;
+}
+
+/* --- Badges --- */
+.badge {
+    display: inline-block;
+    padding: 0.25rem 0.65rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.badge-active { background: #d1fae5; color: #065f46; }
+.badge-completed { background: #dbeafe; color: #1e40af; }
+.badge-attended { background: #d1fae5; color: #065f46; }
+.badge-scheduled { background: #fef3c7; color: #92400e; }
+.badge-cancelled { background: #fee2e2; color: #991b1b; }
+
+/* --- Buttons --- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    border: none;
+    transition: all 0.2s;
+}
+
+.btn-primary {
+    background-color: var(--primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-dark);
+}
+
+.btn-secondary {
+    background-color: #e2e8f0;
+    color: #334155;
+}
+
+.btn-secondary:hover {
+    background-color: #cbd5e1;
+}
+
+.btn-sm {
+    padding: 0.35rem 0.75rem;
+    font-size: 0.8rem;
+}
+
+/* --- Form Controls & Spring Errors --- */
+.form-group {
+    margin-bottom: 1.4rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #374151;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.65rem 0.9rem;
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.95rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(0, 119, 182, 0.15);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+}
+
+.form-error {
+    color: var(--danger);
+    font-size: 0.82rem;
+    font-weight: 500;
+    margin-top: 0.3rem;
+    display: block;
+}
+
+.has-error .form-control {
+    border-color: var(--danger);
+    background-color: #fffbfa;
+}
+
+/* --- Footer --- */
+footer {
+    text-align: center;
+    padding: 1.5rem;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    background: white;
+    border-top: 1px solid var(--border);
+    margin-top: auto;
+}
