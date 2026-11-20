@@ -19,7 +19,7 @@ import java.util.Map;
 
 /**
  * Unit 2.1: Patient Portal Dashboard Servlet.
- * Displays appointments, rehabilitation plans, and prescribed exercises.
+ * Displays appointments, rehabilitation plans, prescribed exercises, and package balances.
  */
 @WebServlet("/patient/dashboard")
 public class PatientDashboardServlet extends HttpServlet {
@@ -31,9 +31,13 @@ public class PatientDashboardServlet extends HttpServlet {
 
         List<Map<String, Object>> mySessions = new ArrayList<>();
         List<Map<String, Object>> myExercises = new ArrayList<>();
+        Map<String, Object> myPackage = new HashMap<>();
         String currentDiagnosis = "General Consultation";
         int completedSessions = 0;
         int targetSessions = 0;
+        int latestPainBefore = 0;
+        int latestPainAfter = 0;
+        boolean hasSoapNotes = false;
 
         String sessionsSql = """
             SELECT s.id, s.session_date, s.start_time, s.end_time, s.status,
@@ -57,8 +61,27 @@ public class PatientDashboardServlet extends HttpServlet {
             WHERE p.user_id = ? AND tp.status = 'ACTIVE'
         """;
 
+        String packageSql = """
+            SELECT pi.package_name, pi.total_sessions, pi.remaining_sessions,
+                   pi.net_amount, pi.payment_status, pi.payment_method
+            FROM packages_invoices pi
+            JOIN patients p ON pi.patient_id = p.id
+            WHERE p.user_id = ?
+            ORDER BY pi.id DESC LIMIT 1
+        """;
+
+        String latestSoapSql = """
+            SELECT sn.pain_score_before, sn.pain_score_after
+            FROM soap_notes sn
+            JOIN sessions s ON sn.session_id = s.id
+            JOIN patients p ON s.patient_id = p.id
+            WHERE p.user_id = ?
+            ORDER BY s.session_date DESC, s.start_time DESC LIMIT 1
+        """;
+
         try (Connection conn = DatabaseConnectionPool.getConnection()) {
 
+            // Sessions
             try (PreparedStatement ps1 = conn.prepareStatement(sessionsSql)) {
                 ps1.setLong(1, userId);
                 try (ResultSet rs1 = ps1.executeQuery()) {
@@ -75,6 +98,7 @@ public class PatientDashboardServlet extends HttpServlet {
                 }
             }
 
+            // Plan & Exercises
             try (PreparedStatement ps2 = conn.prepareStatement(planSql)) {
                 ps2.setLong(1, userId);
                 try (ResultSet rs2 = ps2.executeQuery()) {
@@ -96,15 +120,47 @@ public class PatientDashboardServlet extends HttpServlet {
                 }
             }
 
+            // Package Balances
+            try (PreparedStatement ps3 = conn.prepareStatement(packageSql)) {
+                ps3.setLong(1, userId);
+                try (ResultSet rs3 = ps3.executeQuery()) {
+                    if (rs3.next()) {
+                        myPackage.put("packageName", rs3.getString("package_name"));
+                        myPackage.put("totalSessions", rs3.getInt("total_sessions"));
+                        myPackage.put("remainingSessions", rs3.getInt("remaining_sessions"));
+                        myPackage.put("netAmount", rs3.getDouble("net_amount"));
+                        myPackage.put("paymentStatus", rs3.getString("payment_status"));
+                        myPackage.put("paymentMethod", rs3.getString("payment_method"));
+                    }
+                }
+            }
+
+            // Latest SOAP Pain
+            try (PreparedStatement ps4 = conn.prepareStatement(latestSoapSql)) {
+                ps4.setLong(1, userId);
+                try (ResultSet rs4 = ps4.executeQuery()) {
+                    if (rs4.next()) {
+                        latestPainBefore = rs4.getInt("pain_score_before");
+                        latestPainAfter = rs4.getInt("pain_score_after");
+                        hasSoapNotes = true;
+                    }
+                }
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         req.setAttribute("mySessions", mySessions);
         req.setAttribute("myExercises", myExercises);
+        req.setAttribute("myPackage", myPackage);
         req.setAttribute("diagnosis", currentDiagnosis);
         req.setAttribute("completedSessions", completedSessions);
         req.setAttribute("targetSessions", targetSessions);
+        req.setAttribute("hasSoapNotes", hasSoapNotes);
+        req.setAttribute("latestPainBefore", latestPainBefore);
+        req.setAttribute("latestPainAfter", latestPainAfter);
+        req.setAttribute("painReliefDelta", Math.max(0, latestPainBefore - latestPainAfter));
 
         req.getRequestDispatcher("/WEB-INF/views/patient-dashboard.jsp").forward(req, resp);
     }

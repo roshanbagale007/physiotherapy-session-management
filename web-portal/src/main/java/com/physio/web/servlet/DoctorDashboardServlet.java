@@ -33,7 +33,7 @@ public class DoctorDashboardServlet extends HttpServlet {
 
         String sql = """
             SELECT s.id, s.session_date, s.start_time, s.end_time, s.status,
-                   u.full_name AS patient_name, tp.diagnosis
+                   p.id AS patient_id, u.full_name AS patient_name, tp.diagnosis
             FROM sessions s
             JOIN therapists t ON s.therapist_id = t.id
             JOIN patients p ON s.patient_id = p.id
@@ -51,6 +51,7 @@ public class DoctorDashboardServlet extends HttpServlet {
                 while (rs.next()) {
                     Map<String, Object> map = new HashMap<>();
                     map.put("id", rs.getLong("id"));
+                    map.put("patientId", rs.getLong("patient_id"));
                     map.put("sessionDate", rs.getDate("session_date"));
                     map.put("startTime", rs.getTime("start_time"));
                     map.put("endTime", rs.getTime("end_time"));

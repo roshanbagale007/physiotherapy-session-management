@@ -46,11 +46,16 @@
         </c:if>
 
         <div class="card">
-            <div class="card-header">
+            <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
                 <h2 class="card-title">Front Desk Session Schedule &amp; Attendance</h2>
-                <a href="${pageContext.request.contextPath}/desk/book-session" class="btn-primary" style="width: auto; text-decoration: none; padding: 0.55rem 1.1rem; font-size: 0.9rem;">
-                    ➕ Book New Appointment
-                </a>
+                <div style="display: flex; gap: 0.75rem;">
+                    <a href="${pageContext.request.contextPath}/desk/invoices" class="btn-primary" style="background: #0284c7; width: auto; text-decoration: none; padding: 0.55rem 1.1rem; font-size: 0.9rem;">
+                        💳 Package Billing &amp; Invoices
+                    </a>
+                    <a href="${pageContext.request.contextPath}/desk/book-session" class="btn-primary" style="width: auto; text-decoration: none; padding: 0.55rem 1.1rem; font-size: 0.9rem;">
+                        ➕ Book New Appointment
+                    </a>
+                </div>
             </div>
             <div class="table-responsive">
                 <table>

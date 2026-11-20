@@ -58,8 +58,11 @@
 
         <!-- Recovery Plan Overview Card -->
         <div class="card">
-            <div class="card-header">
+            <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
                 <h2 class="card-title">My Rehabilitation Journey</h2>
+                <a href="${pageContext.request.contextPath}/patient/pain-analytics" class="btn-primary" style="width: auto; text-decoration: none; padding: 0.55rem 1.1rem; font-size: 0.9rem; background: linear-gradient(135deg, #0284c7, #0369a1);">
+                    📈 View Interactive Pain Recovery Curve &amp; VAS Trajectory
+                </a>
             </div>
             <p><strong>Primary Diagnosis:</strong> ${diagnosis}</p>
             <p style="margin-top: 0.5rem;">
@@ -68,7 +71,55 @@
             <div class="progress-bar-container">
                 <div class="progress-bar" style="width: ${targetSessions > 0 ? (completedSessions * 100 / targetSessions) : 0}%;"></div>
             </div>
+
+            <c:if test="${hasSoapNotes}">
+                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; margin-top: 1rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+                    <div>
+                        <span style="font-size: 0.82rem; color: #64748b; text-transform: uppercase; font-weight: 700;">Latest Pain Evaluation:</span>
+                        <strong style="margin-left: 0.5rem; color: #b91c1c;">VAS ${latestPainBefore}/10</strong> (Before) ➔ 
+                        <strong style="color: #15803d;">VAS ${latestPainAfter}/10</strong> (After)
+                    </div>
+                    <div>
+                        <span style="background: #dcfce7; color: #15803d; border: 1px solid #86efac; padding: 0.25rem 0.65rem; border-radius: 20px; font-weight: 700; font-size: 0.85rem;">
+                            🎉 -${painReliefDelta} Points Single-Session Relief
+                        </span>
+                    </div>
+                </div>
+            </c:if>
         </div>
+
+        <!-- Clinical Package & Billing Balance Card -->
+        <c:if test="${not empty myPackage.packageName}">
+            <div class="card" style="border-left: 5px solid #0077b6;">
+                <div class="card-header">
+                    <h2 class="card-title">💳 My Clinical Package &amp; Session Balance</h2>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 0.5rem;">
+                    <div>
+                        <span style="font-size: 0.8rem; color: #64748b; text-transform: uppercase; font-weight: 600;">Subscribed Package</span>
+                        <div style="font-size: 1.1rem; font-weight: 700; color: #0f172a; margin-top: 0.2rem;">${myPackage.packageName}</div>
+                    </div>
+                    <div>
+                        <span style="font-size: 0.8rem; color: #64748b; text-transform: uppercase; font-weight: 600;">Available Credits</span>
+                        <div style="font-size: 1.1rem; font-weight: 800; color: #15803d; margin-top: 0.2rem;">
+                            ${myPackage.remainingSessions} / ${myPackage.totalSessions} Sessions Left
+                        </div>
+                    </div>
+                    <div>
+                        <span style="font-size: 0.8rem; color: #64748b; text-transform: uppercase; font-weight: 600;">Package Net Fee</span>
+                        <div style="font-size: 1.1rem; font-weight: 700; color: #0284c7; margin-top: 0.2rem;">₹${myPackage.netAmount}</div>
+                    </div>
+                    <div>
+                        <span style="font-size: 0.8rem; color: #64748b; text-transform: uppercase; font-weight: 600;">Payment Status</span>
+                        <div style="margin-top: 0.2rem;">
+                            <span style="background: #dcfce7; color: #15803d; border: 1px solid #86efac; padding: 0.2rem 0.6rem; border-radius: 4px; font-weight: 700; font-size: 0.8rem;">
+                                ${myPackage.paymentStatus} (${myPackage.paymentMethod})
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </c:if>
 
         <!-- Appointments Card -->
         <div class="card">
