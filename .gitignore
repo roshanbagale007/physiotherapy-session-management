@@ -49,6 +49,7 @@ $RECYCLE.BIN/
 .DS_Store
 
 # Temporary & Environment files
+~$*
 application-local.properties
 application-local.yml
 *.env
