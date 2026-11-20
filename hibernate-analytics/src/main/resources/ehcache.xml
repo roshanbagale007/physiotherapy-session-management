@@ -1,0 +1,22 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.ehcache.org/v3"
+        xsi:schemaLocation="http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-107-ext-3.0.xsd">
+
+    <!-- Default Cache Configuration -->
+    <cache-template name="default-template">
+        <expiry>
+            <ttl unit="minutes">60</ttl>
+        </expiry>
+        <resources>
+            <heap unit="entries">2000</heap>
+        </resources>
+    </cache-template>
+
+    <!-- Cache Regions for Annotated Second-Level Entities -->
+    <cache alias="default-query-results-region" uses-template="default-template"/>
+    <cache alias="default-update-timestamps-region" uses-template="default-template"/>
+
+    <cache alias="com.physio.hibernate.model.Exercise" uses-template="default-template"/>
+    <cache alias="com.physio.hibernate.model.Therapist" uses-template="default-template"/>
+    <cache alias="com.physio.hibernate.model.Patient" uses-template="default-template"/>
+</config>

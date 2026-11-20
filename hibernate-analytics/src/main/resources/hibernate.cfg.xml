@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+        <!-- Unit 5.1: Database Connection Settings via PostgreSQL Driver -->
+        <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+        <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/physio_db</property>
+        <property name="hibernate.connection.username">postgres</property>
+        <property name="hibernate.connection.password">roshan123</property>
+
+        <!-- HikariCP Connection Provider Integration -->
+        <property name="hibernate.connection.provider_class">org.hibernate.hikaricp.internal.HikariCPConnectionProvider</property>
+        <property name="hibernate.hikari.maximumPoolSize">10</property>
+        <property name="hibernate.hikari.minimumIdle">2</property>
+        <property name="hibernate.hikari.connectionTimeout">30000</property>
+
+        <!-- Hibernate SQL Dialect & Formatting -->
+        <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.format_sql">true</property>
+        <property name="hibernate.hbm2ddl.auto">validate</property>
+
+        <!-- Unit 5.4: Second-Level Cache (L2) & JCache / Ehcache 3.x Configuration -->
+        <property name="hibernate.cache.use_second_level_cache">true</property>
+        <property name="hibernate.cache.use_query_cache">true</property>
+        <property name="hibernate.cache.region.factory_class">jcache</property>
+        <property name="hibernate.javax.cache.provider">org.ehcache.jsr107.EhcacheCachingProvider</property>
+        <property name="hibernate.javax.cache.uri">ehcache.xml</property>
+
+        <!-- Enable Internal Performance Statistics for Benchmarking -->
+        <property name="hibernate.generate_statistics">true</property>
+
+        <!-- Annotated Entity Mappings -->
+        <mapping class="com.physio.hibernate.model.User"/>
+        <mapping class="com.physio.hibernate.model.Therapist"/>
+        <mapping class="com.physio.hibernate.model.Patient"/>
+        <mapping class="com.physio.hibernate.model.TreatmentPlan"/>
+        <mapping class="com.physio.hibernate.model.Session"/>
+        <mapping class="com.physio.hibernate.model.SoapNote"/>
+        <mapping class="com.physio.hibernate.model.Exercise"/>
+    </session-factory>
+</hibernate-configuration>
