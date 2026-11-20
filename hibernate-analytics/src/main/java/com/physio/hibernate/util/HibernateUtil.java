@@ -5,7 +5,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.AvailableSettings;
 
 import java.sql.Connection;
 import java.sql.Statement;
@@ -47,7 +46,7 @@ public class HibernateUtil {
             settings.put("hibernate.cache.use_query_cache", "true");
             settings.put("hibernate.cache.region.factory_class", "jcache");
             settings.put("hibernate.javax.cache.provider", "org.ehcache.jsr107.EhcacheCachingProvider");
-            settings.put("hibernate.javax.cache.uri", "ehcache.xml");
+            settings.put("hibernate.javax.cache.missing_cache_strategy", "create");
 
             // Enable Internal Statistics for L1 & L2 Cache Benchmarks
             settings.put("hibernate.generate_statistics", "true");
