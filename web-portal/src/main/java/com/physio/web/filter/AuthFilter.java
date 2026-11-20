@@ -45,17 +45,17 @@ public class AuthFilter implements Filter {
             return;
         }
 
-        if (path.startsWith("/doctor") && !"THERAPIST".equalsIgnoreCase(userRole)) {
-            forward403(req, resp, "Physiotherapist (Doctor) access required.");
+        if (path.startsWith("/doctor") && !"THERAPIST".equalsIgnoreCase(userRole) && !"ADMIN".equalsIgnoreCase(userRole)) {
+            forward403(req, resp, "Physiotherapist (Doctor) or Admin access required.");
             return;
         }
 
         if (path.startsWith("/desk") && !"RECEPTIONIST".equalsIgnoreCase(userRole) && !"ADMIN".equalsIgnoreCase(userRole)) {
-            forward403(req, resp, "Front-Desk Receptionist access required.");
+            forward403(req, resp, "Front-Desk Receptionist or Admin access required.");
             return;
         }
 
-        if (path.startsWith("/patient") && !"PATIENT".equalsIgnoreCase(userRole)) {
+        if (path.startsWith("/patient") && !"PATIENT".equalsIgnoreCase(userRole) && !"ADMIN".equalsIgnoreCase(userRole) && !"THERAPIST".equalsIgnoreCase(userRole)) {
             forward403(req, resp, "Patient Portal access required.");
             return;
         }

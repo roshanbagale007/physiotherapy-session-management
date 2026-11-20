@@ -74,17 +74,22 @@
                                             <span class="status-tag status-${s.status}">${s.status}</span>
                                         </td>
                                         <td>
-                                            <c:if test="${s.status eq 'SCHEDULED'}">
-                                                <a href="${pageContext.request.contextPath}/doctor/soap-note?sessionId=${s.id}" class="btn-soap">
-                                                    📝 Record SOAP Note
+                                            <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                                                <c:if test="${s.status eq 'SCHEDULED'}">
+                                                    <a href="${pageContext.request.contextPath}/doctor/soap-note?sessionId=${s.id}" class="btn-soap">
+                                                        📝 Record SOAP
+                                                    </a>
+                                                </c:if>
+                                                <c:if test="${s.status eq 'ATTENDED'}">
+                                                    <span style="color:var(--success); font-weight:600; font-size:0.82rem;">✓ Completed</span>
+                                                </c:if>
+                                                <c:if test="${s.status eq 'CANCELLED'}">
+                                                    <span style="color:var(--text-muted); font-size:0.82rem;">Cancelled</span>
+                                                </c:if>
+                                                <a href="${pageContext.request.contextPath}/doctor/patient-analytics?patientId=${s.patientId}" class="btn-soap" style="background: #0d9488;">
+                                                    📈 Pain Curve
                                                 </a>
-                                            </c:if>
-                                            <c:if test="${s.status eq 'ATTENDED'}">
-                                                <span style="color:var(--success); font-weight:600; font-size:0.85rem;">✓ Note Recorded</span>
-                                            </c:if>
-                                            <c:if test="${s.status eq 'CANCELLED'}">
-                                                <span style="color:var(--text-muted); font-size:0.85rem;">Cancelled</span>
-                                            </c:if>
+                                            </div>
                                         </td>
                                     </tr>
                                 </c:forEach>
