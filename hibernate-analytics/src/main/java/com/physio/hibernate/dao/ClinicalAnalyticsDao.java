@@ -48,13 +48,13 @@ public class ClinicalAnalyticsDao {
         }
     }
 
-    public boolean updateExerciseDifficulty(Long id, String newLevel) {
+    public boolean updateExerciseCategory(Long id, String newCategory) {
         Transaction tx = null;
         try (Session session = sessionFactory.openSession()) {
             tx = session.beginTransaction();
             Exercise ex = session.get(Exercise.class, id);
             if (ex != null) {
-                ex.setDifficultyLevel(newLevel);
+                ex.setCategory(newCategory);
                 session.merge(ex);
                 tx.commit();
                 return true;
@@ -129,11 +129,11 @@ public class ClinicalAnalyticsDao {
     /**
      * Criteria API: Dynamic multi-predicate query filtering sessions by date range and status.
      */
-    public List<Session> findSessionsByCriteria(LocalDate fromDate, LocalDate toDate, String status) {
+    public List<com.physio.hibernate.model.Session> findSessionsByCriteria(LocalDate fromDate, LocalDate toDate, String status) {
         try (Session session = sessionFactory.openSession()) {
             CriteriaBuilder cb = session.getCriteriaBuilder();
-            CriteriaQuery<Session> cq = cb.createQuery(Session.class);
-            Root<Session> root = cq.from(Session.class);
+            CriteriaQuery<com.physio.hibernate.model.Session> cq = cb.createQuery(com.physio.hibernate.model.Session.class);
+            Root<com.physio.hibernate.model.Session> root = cq.from(com.physio.hibernate.model.Session.class);
 
             // Fetch join patient and therapist for clean projection
             root.fetch("patient", JoinType.INNER).fetch("user", JoinType.INNER);
@@ -160,9 +160,9 @@ public class ClinicalAnalyticsDao {
     }
 
     /**
-     * Criteria API: Filter exercises by muscle group and difficulty.
+     * Criteria API: Filter exercises by muscle group and category.
      */
-    public List<Exercise> findExercisesByCriteria(String muscleGroup, String difficulty) {
+    public List<Exercise> findExercisesByCriteria(String muscleGroup, String category) {
         try (Session session = sessionFactory.openSession()) {
             CriteriaBuilder cb = session.getCriteriaBuilder();
             CriteriaQuery<Exercise> cq = cb.createQuery(Exercise.class);
@@ -172,8 +172,8 @@ public class ClinicalAnalyticsDao {
             if (muscleGroup != null && !muscleGroup.isBlank()) {
                 predicates.add(cb.like(cb.lower(root.get("targetMuscleGroup")), "%" + muscleGroup.toLowerCase() + "%"));
             }
-            if (difficulty != null && !difficulty.isBlank()) {
-                predicates.add(cb.equal(cb.upper(root.get("difficultyLevel")), difficulty.toUpperCase()));
+            if (category != null && !category.isBlank()) {
+                predicates.add(cb.equal(cb.upper(root.get("category")), category.toUpperCase()));
             }
 
             cq.where(cb.and(predicates.toArray(new Predicate[0])));

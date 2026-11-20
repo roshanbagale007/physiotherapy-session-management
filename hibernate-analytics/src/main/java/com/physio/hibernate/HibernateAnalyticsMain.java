@@ -43,17 +43,19 @@ public class HibernateAnalyticsMain {
             // -----------------------------------------------------------------
             System.out.println("--- [TEST 2] CRUD Operations with Session & Transaction (Unit 5.2) ---");
             Exercise newExercise = new Exercise();
-            newExercise.setName("McKenzie Prone Press-Up");
+            newExercise.setName("McKenzie Prone Press-Up " + System.currentTimeMillis());
             newExercise.setTargetMuscleGroup("Lumbar Extensors & Disc Centralization");
-            newExercise.setDifficultyLevel("BEGINNER");
-            newExercise.setDescription("Prone press-up protocol to promote anterior disc nuclear centralization.");
-            newExercise.setVideoUrl("https://physioclinic.com/exercises/mckenzie-pressup.mp4");
+            newExercise.setCategory("MOBILITY");
+            newExercise.setInstructions("Prone press-up protocol to promote anterior disc nuclear centralization.");
+            newExercise.setDefaultSets(3);
+            newExercise.setDefaultReps(10);
+            newExercise.setDefaultHoldSeconds(5);
 
             Exercise saved = dao.saveExercise(newExercise);
             System.out.printf(">> [CREATE] Inserted new Exercise #%d: '%s'%n", saved.getId(), saved.getName());
 
-            boolean updated = dao.updateExerciseDifficulty(saved.getId(), "INTERMEDIATE");
-            System.out.printf(">> [UPDATE] Updated Exercise #%d difficulty to INTERMEDIATE: %s%n", saved.getId(), updated);
+            boolean updated = dao.updateExerciseCategory(saved.getId(), "FLEXIBILITY");
+            System.out.printf(">> [UPDATE] Updated Exercise #%d category to FLEXIBILITY: %s%n", saved.getId(), updated);
 
             Exercise retrieved = dao.getExerciseById(saved.getId());
             System.out.printf(">> [READ] Verified updated Exercise state: %s%n%n", retrieved);
@@ -103,8 +105,8 @@ public class HibernateAnalyticsMain {
                         s.getTherapist().getUser().getFullName(), s.getStatus())
             );
 
-            List<Exercise> coreExercises = dao.findExercisesByCriteria("Core", "BEGINNER");
-            System.out.printf(">> [Criteria API] Exercises matching (Muscle: 'Core', Difficulty: 'BEGINNER'): Found %d%n", coreExercises.size());
+            List<Exercise> coreExercises = dao.findExercisesByCriteria("Core", "STRENGTH");
+            System.out.printf(">> [Criteria API] Exercises matching (Muscle: 'Core', Category: 'STRENGTH'): Found %d%n", coreExercises.size());
             coreExercises.forEach(e -> System.out.println("   - " + e));
             System.out.println();
 

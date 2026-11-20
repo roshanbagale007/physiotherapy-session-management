@@ -17,20 +17,26 @@ public class Exercise {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, length = 150)
     private String name;
 
     @Column(name = "target_muscle_group", nullable = false, length = 100)
     private String targetMuscleGroup;
 
-    @Column(name = "difficulty_level", length = 20)
-    private String difficultyLevel = "BEGINNER";
+    @Column(nullable = false, length = 50)
+    private String category;
 
-    @Column(columnDefinition = "TEXT")
-    private String description;
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String instructions;
 
-    @Column(name = "video_url", length = 255)
-    private String videoUrl;
+    @Column(name = "default_sets")
+    private Integer defaultSets = 3;
+
+    @Column(name = "default_reps")
+    private Integer defaultReps = 10;
+
+    @Column(name = "default_hold_seconds")
+    private Integer defaultHoldSeconds = 0;
 
     public Exercise() {}
 
@@ -43,17 +49,24 @@ public class Exercise {
     public String getTargetMuscleGroup() { return targetMuscleGroup; }
     public void setTargetMuscleGroup(String targetMuscleGroup) { this.targetMuscleGroup = targetMuscleGroup; }
 
-    public String getDifficultyLevel() { return difficultyLevel; }
-    public void setDifficultyLevel(String difficultyLevel) { this.difficultyLevel = difficultyLevel; }
+    public String getCategory() { return category; }
+    public void setCategory(String category) { this.category = category; }
 
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public String getInstructions() { return instructions; }
+    public void setInstructions(String instructions) { this.instructions = instructions; }
 
-    public String getVideoUrl() { return videoUrl; }
-    public void setVideoUrl(String videoUrl) { this.videoUrl = videoUrl; }
+    public Integer getDefaultSets() { return defaultSets; }
+    public void setDefaultSets(Integer defaultSets) { this.defaultSets = defaultSets; }
+
+    public Integer getDefaultReps() { return defaultReps; }
+    public void setDefaultReps(Integer defaultReps) { this.defaultReps = defaultReps; }
+
+    public Integer getDefaultHoldSeconds() { return defaultHoldSeconds; }
+    public void setDefaultHoldSeconds(Integer defaultHoldSeconds) { this.defaultHoldSeconds = defaultHoldSeconds; }
 
     @Override
     public String toString() {
-        return String.format("Exercise #%d: %s [%s | %s]", id, name, targetMuscleGroup, difficultyLevel);
+        return String.format("Exercise #%d: %s [%s | %s] (%d sets x %d reps, %ds hold)",
+                id, name, targetMuscleGroup, category, defaultSets, defaultReps, defaultHoldSeconds);
     }
 }
