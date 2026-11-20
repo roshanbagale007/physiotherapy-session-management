@@ -1,0 +1,489 @@
+{
+  "info": {
+    "_postman_id": "7a3e9c8f-51b2-4d2a-89f4-physiocare001",
+    "name": "Physiotherapy Session Management REST API (Task 4)",
+    "description": "Comprehensive Postman test collection for 24MCAC302 MCA Sem III Advance Java Project.\nAuthor: ROSHAN NAMDEO BAGALE (Roll No: 50 | Div D).\nCovers all endpoints for Scheduling, Attendance, Digital SOAP Notes, and Adherence Analytics.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. System & Actuator Health",
+      "item": [
+        {
+          "name": "Actuator Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/actuator/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["actuator", "health"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Application is UP', function () { var json = pm.response.json(); pm.expect(json.status).to.eql('UP'); });",
+                  "pm.test('Database connection is valid', function () { var json = pm.response.json(); pm.expect(json.components.db.status).to.eql('UP'); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "2. Patients Directory",
+      "item": [
+        {
+          "name": "Get All Patients",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/patients",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "patients"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Returns patient list', function () { var json = pm.response.json(); pm.expect(json.data.length).to.be.above(0); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Patient by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/patients/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "patients", "1"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Patient name is Rahul Verma', function () { var json = pm.response.json(); pm.expect(json.data.fullName).to.eql('Rahul Verma'); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "3. Physiotherapists & Availability",
+      "item": [
+        {
+          "name": "Get All Physiotherapists",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/therapists",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "therapists"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Returns therapists list', function () { var json = pm.response.json(); pm.expect(json.data.length).to.be.above(0); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Check Therapist Slot Availability",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/therapists/1/availability?date=2026-11-25",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "therapists", "1", "availability"],
+              "query": [
+                {
+                  "key": "date",
+                  "value": "2026-11-25"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Available slots calculated', function () { var json = pm.response.json(); pm.expect(json.data.availableTimeSlots).to.be.an('array'); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "4. Treatment Plans",
+      "item": [
+        {
+          "name": "Get All Treatment Plans",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/plans",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "plans"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Returns active plans', function () { var json = pm.response.json(); pm.expect(json.data.length).to.be.above(0); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Plan by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/plans/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "plans", "1"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Plan has adherence rate', function () { var json = pm.response.json(); pm.expect(json.data.adherencePercentage).to.be.at.least(0); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create Treatment Plan (POST)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"patientId\": 2,\n  \"therapistId\": 2,\n  \"diagnosis\": \"Post-Op Meniscus Repair Knee Protocol\",\n  \"treatmentGoal\": \"Regain active flexion to 110 degrees and restore quadriceps strength.\",\n  \"startDate\": \"2026-11-20\",\n  \"estimatedEndDate\": \"2026-12-30\",\n  \"targetSessions\": 10\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/plans",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "plans"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 201', function () { pm.response.to.have.status(201); });",
+                  "pm.test('Plan created successfully', function () { var json = pm.response.json(); pm.expect(json.success).to.be.true; });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "5. Therapy Sessions & Digital SOAP Notes",
+      "item": [
+        {
+          "name": "List All Sessions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/sessions",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "sessions"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Returns sessions array', function () { var json = pm.response.json(); pm.expect(json.data).to.be.an('array'); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Single Session with SOAP Note",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/sessions/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "sessions", "1"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Contains attached SOAP note', function () { var json = pm.response.json(); pm.expect(json.data.soapNote).to.not.be.null; pm.expect(json.data.soapNote.painDelta).to.be.above(0); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Book New Session (POST)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"planId\": 1,\n  \"patientId\": 1,\n  \"therapistId\": 1,\n  \"sessionDate\": \"2026-11-28\",\n  \"startTime\": \"15:00\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/sessions",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "sessions"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 201', function () { pm.response.to.have.status(201); });",
+                  "pm.test('Session scheduled with status SCHEDULED', function () { var json = pm.response.json(); pm.expect(json.data.status).to.eql('SCHEDULED'); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update Session Attendance (PUT)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"ATTENDED\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/sessions/1/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "sessions", "1", "status"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Status confirmed ATTENDED', function () { var json = pm.response.json(); pm.expect(json.data.status).to.eql('ATTENDED'); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Record Digital SOAP Progress Note (POST)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"painScoreBefore\": 6,\n  \"painScoreAfter\": 2,\n  \"rangeOfMotionNotes\": \"Lumbar flexion improved by 15 degrees\",\n  \"muscleStrengthGrade\": \"4+/5 MMT\",\n  \"subjectiveNotes\": \"Patient reports noticeable relief post electrical stimulation.\",\n  \"objectiveFindings\": \"Reduced muscle spasm in lower lumbar region.\",\n  \"assessmentSummary\": \"Patient is responding exceptionally well to therapeutic ultrasound and core stability exercises.\",\n  \"planNextSession\": \"Progress to standing resistance band workouts.\",\n  \"modalitiesUsed\": \"IFT 4-pole, Ultrasound 1MHz, Core Drills\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/sessions/6/soap-note",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "sessions", "6", "soap-note"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 201', function () { pm.response.to.have.status(201); });",
+                  "pm.test('Pain delta is calculated', function () { var json = pm.response.json(); pm.expect(json.data.painDelta).to.eql(4); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "6. Clinical Recovery Analytics",
+      "item": [
+        {
+          "name": "Get Clinic Recovery KPIs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/analytics/recovery",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "analytics", "recovery"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Contains adherence rate', function () { var json = pm.response.json(); pm.expect(json.data.overallAdherencePercentage).to.be.above(0); });",
+                  "pm.test('Contains average pain reduction', function () { var json = pm.response.json(); pm.expect(json.data.averagePainScoreReduction).to.be.above(0); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "7. Validation & Error Handling Tests",
+      "item": [
+        {
+          "name": "Test JSR-380 Validation Error (Expect 400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/sessions",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "sessions"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 400 Bad Request', function () { pm.response.to.have.status(400); });",
+                  "pm.test('Contains field-by-field validation errors', function () { var json = pm.response.json(); pm.expect(json.validationErrors).to.not.be.empty; });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Test Resource Not Found (Expect 404)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/sessions/99999",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "sessions", "99999"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 404 Not Found', function () { pm.response.to.have.status(404); });",
+                  "pm.test('Error message specifies resource not found', function () { var json = pm.response.json(); pm.expect(json.error).to.eql('Resource Not Found'); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

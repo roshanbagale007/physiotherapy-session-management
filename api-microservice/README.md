@@ -126,3 +126,38 @@ api-microservice/
    [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
    [main] c.p.a.ApiMicroserviceApplication         : Started ApiMicroserviceApplication in ... seconds
    ```
+
+---
+
+## 5. Swagger UI & OpenAPI 3.0 Documentation (Phase 7)
+
+Once the application is running, open your browser to access:
+
+* **Interactive Swagger UI Dashboard:**  
+  [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)  
+  *Provides a live UI allowing professors and evaluators to test all 14 endpoints ("Try it out"), inspect request/response schemas, and view real-time HTTP response status codes.*
+
+* **Raw OpenAPI 3.0 Specification (JSON):**  
+  [http://localhost:8080/v3/api-docs](http://localhost:8080/v3/api-docs)  
+  *Machine-readable API contract compliant with OpenAPI 3.0.*
+
+---
+
+## 6. Postman Test Suite & Automated Assertions
+
+A comprehensive Postman test collection is located at:  
+[`postman/physiotherapy-api.postman_collection.json`](file:///c:/Users/ROSHAN/eclipse-workspace/physiotherapy-session-management/api-microservice/postman/physiotherapy-api.postman_collection.json)
+
+### How to Import & Run in Postman:
+1. Open **Postman** desktop or web app.
+2. Click **Import** (top left).
+3. Drag and drop `api-microservice/postman/physiotherapy-api.postman_collection.json`.
+4. The collection **"Physiotherapy Session Management REST API (Task 4)"** will appear with 7 organized folders:
+   - `1. System & Actuator Health` (Health & DB checks)
+   - `2. Patients Directory`
+   - `3. Physiotherapists & Availability`
+   - `4. Treatment Plans`
+   - `5. Therapy Sessions & Digital SOAP Notes`
+   - `6. Clinical Recovery Analytics`
+   - `7. Validation & Error Handling Tests` (Negative test cases for HTTP 400 Bad Request, 404 Not Found, 409 Conflict)
+5. Click **Run Collection** to execute all tests automatically. Every test script validates response status, JSON structure, and healthcare domain logic.
