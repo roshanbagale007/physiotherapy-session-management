@@ -106,8 +106,9 @@
                                             <fmt:formatNumber value="${(plan.completedSessions / plan.targetSessions) * 100}" maxFractionDigits="0"/>%
                                         </span>
                                     </div>
+                                    <c:set var="progressPct" value="${plan.targetSessions > 0 ? (plan.completedSessions * 100 / plan.targetSessions) : 0}"/>
                                     <div class="progress-bar-container">
-                                        <div class="progress-bar-fill" style="width: ${Math.min(100, (plan.completedSessions / plan.targetSessions) * 100)}%;"></div>
+                                        <div class="progress-bar-fill" style="width: ${progressPct > 100 ? 100 : progressPct}%;"></div>
                                     </div>
                                 </td>
                                 <td>
